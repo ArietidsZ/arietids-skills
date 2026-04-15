@@ -21,8 +21,9 @@ Rules:
 - Do not add filename headers or page-number prefixes inside the page file.
 - Never use `[illegible]`, `[unreadable]`, or other generic omission placeholders.
 - Use `[?]` only for marks or regions that remain unresolved after best-effort reading, preserve that uncertainty inline instead of omitting it, and list each such `[?]` case in the `LOW_CONFIDENCE` block so the main agent revisits it during the zoom pass.
+- Even when you make a best-guess transcription without inline `[?]`, every region below 99% confidence must still be listed in the `LOW_CONFIDENCE` block for zoom-pass review.
 
-If confidence drops below 99% for any region, append this block at the end of the page file:
+If confidence drops below 99% for any region, append this block at the end of the page file. Include both unresolved `[?]` cases and sub-99% best guesses:
 
 ```markdown
 <!-- LOW_CONFIDENCE
