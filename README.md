@@ -31,7 +31,7 @@ ln -sfn "$repo_root/transcription-content-review" "$HOME/.agents/skills/transcri
 From the repository root:
 
 ```bash
-rm -f "packages/"*.skill
+rm -f -- packages/*.skill(N)
 zip -rq "packages/course-review-generator.skill" "course-review-generator"
 zip -rq "packages/handwritten-pdf-transcription.skill" "handwritten-pdf-transcription"
 zip -rq "packages/transcription-content-review.skill" "transcription-content-review"
