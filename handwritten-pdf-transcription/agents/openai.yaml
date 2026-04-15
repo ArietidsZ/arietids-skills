@@ -1,0 +1,4 @@
+interface:
+  display_name: "Handwritten PDF Transcription"
+  short_description: "Transcribe handwritten PDFs into Markdown"
+  default_prompt: "Transcribe this handwritten PDF into structured Markdown with high fidelity and report the final file path."
