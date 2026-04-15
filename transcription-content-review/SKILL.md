@@ -20,8 +20,9 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 2. Identify the subject, level, notation, and language so corrections stay context-aware.
 3. Review sequentially for transcription artefacts, mathematical errors, logical errors, definitional errors, factual issues, notation inconsistencies, unit or dimensional errors, cross-reference errors, terminological misuse, and unclear fragments.
 4. Start `review_report.md` with an overview, then record each issue in document order with location, category, severity, original text, problem, correction, and enough explanation or working to show why the correction is right.
-5. If there is a real source-backed folder for the transcription, write the corrected document to `transcription_reviewed.md` in that folder; otherwise return the corrected standalone document directly in chat.
-6. Keep the reviewed document clean; keep reasoning and audit details in `review_report.md`, or in the full review report returned in chat-only runs, including recurring patterns, reconstructed passages, readability or structural changes if applicable, and a final verdict.
+5. If there is a real source-backed folder for the transcription, write `review_report.md` in that folder; otherwise prepare the full review report for direct chat output.
+6. If there is a real source-backed folder for the transcription, write the corrected document to `transcription_reviewed.md` in that folder; otherwise return the corrected standalone document directly in chat.
+7. Keep the reviewed document clean; keep reasoning and audit details in `review_report.md`, or in the full review report returned in chat-only runs, including recurring patterns, reconstructed passages, readability or structural changes if applicable, and a final verdict.
 
 ## Correction standard
 
@@ -29,6 +30,7 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - Prefer the smallest correction that makes the document accurate and readable.
 - Preserve the author's structure and voice; fix and clarify rather than substantially reorganizing or adding content beyond what is needed for correctness and readability.
 - Make only minimal structural adjustments when they are necessary to keep the document coherent or usable.
+- Fix broken LaTeX or other math markup and ensure equations and display blocks are syntactically valid and render correctly.
 - Remove `[?]`, `LOW_CONFIDENCE`, and stray editorial HTML comments from the final reviewed document, but keep page-marker comments when they help navigation or auditing against source pages.
 - If the final text depends on reconstruction rather than certainty, mark it with a footnote or another visible inline indicator and explain the reconstruction in the report.
 - If a passage remains ambiguous, choose the best interpretation, mark it visibly in the final document, and explain that choice in the report.
