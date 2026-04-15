@@ -1,11 +1,11 @@
 ---
 name: handwritten-pdf-transcription
-description: Use when the user wants a handwritten PDF, notebook-scan PDF, or annotated PDF pages read, digitized, or converted into Markdown/text, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
+description: Use when the user wants a handwritten PDF, notebook-scan PDF, or annotated PDF pages read, digitized, or converted into reviewed Markdown/text, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
 ---
 
 # Handwritten PDF Transcription
 
-Transcribe handwritten PDFs into structured Markdown without dropping content. Preserve wording, math, hierarchy, annotations, and diagrams. The output language should match the source document.
+Transcribe handwritten PDFs into structured Markdown without dropping content, then automatically run transcription review so the final result is a cleaned Markdown file named after the source PDF. Preserve wording, math, hierarchy, annotations, and diagrams. The output language should match the source document unless the user asks otherwise.
 
 ## Required helpers
 
@@ -14,6 +14,7 @@ Transcribe handwritten PDFs into structured Markdown without dropping content. P
 - If subagents are available, have page workers write one Markdown file per page under `parts/`; do not collect transcript text inline in worker responses.
 - Use 1 page for a single-page document; if subagents are available, use 1 page per batch for 2-5 pages, 2-3 pages per batch for 6-20 pages, and 4-5 pages per batch above 20 pages, and dispatch all batches in parallel in the same turn rather than serially.
 - Read this skill's bundled worker-prompt file, `references/transcription-worker-prompt.md`, before dispatching page workers.
+- After raw transcription is assembled, immediately invoke `transcription-content-review` on the generated workspace instead of stopping at `transcription.md`.
 
 ## Working folder
 
@@ -43,15 +44,18 @@ notes/
 8. Re-open every low-confidence region with cropped zoomed images saved under `zoomed/page_NNN_region_MM.png` and update the page Markdown.
 9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or keep `[?]` only for marks that are still unresolved after the zoom re-check and then delete the comment block.
 10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
-11. Run one final sweep against the rendered page images before delivering the output path.
+11. Immediately run `transcription-content-review` against the generated transcription workspace.
+12. If review succeeds, promote the reviewed output to `<pdf-basename>.md` next to the original PDF, remove `pages/`, `parts/`, `zoomed/`, `transcription.md`, `transcription_reviewed.md`, `review_report.md`, and delete the temporary working folder.
+13. If review fails, keep the full temporary workspace for inspection and report that cleanup did not run.
+14. Deliver only the final `<pdf-basename>.md` path after a successful review.
 
 ## Output rules
 
-- Never summarize or paraphrase.
+- Never summarize or paraphrase during transcription.
 - Keep margin notes and inline annotations.
 - Use `[?]` only after the zoomed re-check still cannot resolve the mark.
 - Never use `[illegible]`, `[unreadable]`, or other omission placeholders.
-- Deliver the final `transcription.md` path.
+- The final success state is one reviewed Markdown file next to the source PDF and no temporary workspace.
 
 ## Completion checklist
 
@@ -59,3 +63,5 @@ notes/
 - All page files written to `parts/`
 - All low-confidence regions rechecked
 - `transcription.md` merged and reviewed
+- Final reviewed file renamed to `<pdf-basename>.md`
+- Temporary workspace deleted after successful review, or preserved on review failure

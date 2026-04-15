@@ -1,4 +1,4 @@
 interface:
   display_name: "Handwritten PDF Transcription"
-  short_description: "Transcribe handwritten PDFs into Markdown"
-  default_prompt: "Use $handwritten-pdf-transcription to transcribe this handwritten PDF with high fidelity, run low-confidence review, and return the final transcription.md path."
+  short_description: "Transcribe handwritten PDFs into reviewed Markdown"
+  default_prompt: "Use $handwritten-pdf-transcription to transcribe this handwritten PDF with high fidelity, run transcription review automatically, rename the final result to the PDF basename with .md, clean up temporary artifacts after success, and return the final Markdown path."
