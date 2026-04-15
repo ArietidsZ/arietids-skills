@@ -29,7 +29,7 @@ notes/
 
 - `pages/` stores full-page PNG renders.
 - `parts/` stores one Markdown file per page.
-- `zoomed/` stores cropped re-renders for low-confidence regions.
+- `zoomed/` stores cropped re-renders for low-confidence regions, for example `zoomed/page_NNN_region_MM.png`.
 
 ## Workflow
 
@@ -40,7 +40,7 @@ notes/
 5. Format math with `$...$` and `$$...$$`.
 6. Represent diagrams with Mermaid, ASCII, or a precise structured description.
 7. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
-8. Re-open every low-confidence region with cropped zoomed images and update the page Markdown.
+8. Re-open every low-confidence region with cropped zoomed images saved under `zoomed/page_NNN_region_MM.png` and update the page Markdown.
 9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or convert any still-unresolved mark into the final inline `[?]` form and then delete the comment block.
 10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
 11. Run one final sweep against the rendered page images before delivering the output path.
