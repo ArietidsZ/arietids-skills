@@ -12,6 +12,7 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - Prefer `transcription.md` when reviewing the output of handwritten transcription.
 - If sibling page images are available, use them to resolve ambiguous passages.
 - If the user points to another Markdown file, review that file instead.
+- If the user pastes transcription content directly in chat, review that content as the source text and still produce `transcription_reviewed.md` and `review_report.md` in the working folder if one is available.
 
 ## Workflow
 
@@ -45,3 +46,13 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - `review_report.md`
 
 Report both paths back to the user and call out any heavily reconstructed passages.
+
+## Completion checklist
+
+- The full source text was read before edits, whether it came from `transcription.md`, another Markdown file, or pasted chat content.
+- Subject, level, notation, and language were identified well enough to review contextually.
+- Transcription artefacts, mathematical issues, logical issues, factual issues, notation inconsistencies, and unclear passages were reviewed and corrected.
+- Reconstructed or ambiguous passages are visibly marked in the final reviewed document and explained in the report.
+- `transcription_reviewed.md` is clean, readable, and free of unresolved placeholders or hidden review markup.
+- `review_report.md` includes the required overview, per-issue entries, severity labels, and closing sections.
+- Both deliverables were saved in the working folder when file output was possible and both were presented back to the user.
