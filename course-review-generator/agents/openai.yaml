@@ -1,0 +1,4 @@
+interface:
+  display_name: "Course Review Generator"
+  short_description: "Build exam review notes from course files"
+  default_prompt: "Use $course-review-generator to generate an exam-focused Markdown review guide from these course materials and keep every item grounded in the source files."

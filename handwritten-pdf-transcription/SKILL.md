@@ -1,176 +1,72 @@
 ---
 name: handwritten-pdf-transcription
-description: "Transcribe handwritten notes from PDF files into well-structured, high-fidelity Markdown. Use this skill whenever the user uploads a handwritten PDF and wants it transcribed, digitized, or converted to text/Markdown. Also trigger when the user mentions 'handwriting', 'handwritten notes', 'lecture notes', 'scanned notes', or asks to 'read my notes' from a PDF. This skill handles the full pipeline: PDF-to-image rendering, visual transcription with zoom-in verification for hard-to-read regions, and parallel subagent processing for multi-page documents. The output matches the language of the handwriting and preserves all content including math, diagrams, and margin annotations."
+description: Use when the user wants a handwritten PDF, notebook-scan PDF, or annotated PDF pages read, digitized, or converted into reviewed Markdown/text, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
 ---
 
 # Handwritten PDF Transcription
 
-Transcribe handwritten notes from a PDF into well-structured, high-fidelity Markdown. Every word, symbol, annotation, and diagram must be captured. The output language must match the language of the handwriting. No content may be summarized, paraphrased, or omitted.
+Transcribe handwritten PDFs into structured Markdown without dropping content, then automatically run transcription review so the final result is a cleaned Markdown file named after the source PDF. Preserve wording, math, hierarchy, annotations, and diagrams. The output language should match the source document unless the user asks otherwise.
 
-## Step 1 — Read dependencies
+## Required helpers
 
-Before anything else, read the local PDF skill:
+- Invoke the `pdf` skill for visual PDF handling and page inspection.
+- Choose a page-rendering method that keeps crop-capable zoom review possible, for example `pdf2image` or an equivalent renderer that preserves image objects or produces saved renders that can be reopened for cropping and low-confidence re-renders.
+- If subagents are available, have page workers write one Markdown file per page under `parts/`; do not collect transcript text inline in worker responses.
+- Use 1 page for a single-page document; if subagents are available, use 1 page per batch for 2-5 pages, 2-3 pages per batch for 6-20 pages, and 4-5 pages per batch above 20 pages, and dispatch all batches in parallel in the same turn rather than serially.
+- Read this skill's bundled worker-prompt file, `references/transcription-worker-prompt.md`, before dispatching page workers.
+- After raw transcription is assembled, immediately invoke `transcription-content-review` on the generated workspace instead of stopping at `transcription.md`.
 
-```
-/Users/arietids/.agents/skills/pdf/SKILL.md
-```
+## Working folder
 
-Use `pdf2image` (`convert_from_path`) for page rendering, not `pdftoppm`, because you need PIL Image objects for cropping during the zoom-in pass.
+Create a working folder next to the source PDF using the PDF filename without `.pdf`.
 
-## Step 2 — Set up the working folder
+The temporary workspace must be newly created for the current run. If a sibling directory with that PDF basename already exists, do not reuse or delete it automatically: stop and ask for cleanup, or choose a different temporary workspace name for this run.
 
-Create a single folder that holds **everything** — rendered images, zoomed crops, per-page markdown files, and the final merged output. The folder shares the PDF's name (minus `.pdf`) and lives next to the source file.
-
-```
-# Example: source is /Users/arietids/Downloads/notes.pdf
-#
-# Working folder layout:
-# /Users/arietids/Downloads/notes/                    ← working root
-# /Users/arietids/Downloads/notes/pages/              ← full-page images
-# /Users/arietids/Downloads/notes/pages/page_001.png
-# /Users/arietids/Downloads/notes/pages/page_002.png
-# /Users/arietids/Downloads/notes/zoomed/             ← cropped re-renders
-# /Users/arietids/Downloads/notes/zoomed/page_002_region_01.png
-# /Users/arietids/Downloads/notes/parts/              ← per-page markdown from subagents
-# /Users/arietids/Downloads/notes/parts/page_001.md
-# /Users/arietids/Downloads/notes/parts/page_002.md
-# /Users/arietids/Downloads/notes/transcription.md    ← final merged output
+```text
+notes/
+  pages/
+  parts/
+  zoomed/
+  transcription.md
 ```
 
-Create all subdirectories (`pages/`, `zoomed/`, `parts/`) up front.
+- `pages/` stores full-page PNG renders.
+- `parts/` stores one Markdown file per page.
+- `zoomed/` stores cropped re-renders for low-confidence regions, for example `zoomed/page_NNN_region_MM.png`.
 
-## Step 3 — Render PDF pages to images
+## Workflow
 
-Convert every page at **300 DPI minimum** using `pdf2image`:
+1. Create a newly created working folder for this run, then create `pages/`, `parts/`, and `zoomed/` inside it before rendering pages or dispatching page workers. If the basename-matched sibling directory already exists at all, stop before writing files there unless you intentionally switch to a different temporary workspace name.
+2. Render every page to PNG at 300 DPI or higher with a renderer that still allows later crop and re-render zoom work, whether by keeping image objects in memory or by reopening saved page PNGs for cropping.
+3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`. During page-level transcription and sequential fallback, unresolved marks may be carried inline as temporary `[?]` markers so they can be revisited in the zoom pass. If subagents are unavailable, write the same per-page files sequentially yourself instead of switching output formats: keep each `parts/page_NNN.md` file to page content only, append low-confidence regions in the exact `<!-- LOW_CONFIDENCE ... -->` block shape, for example `<!-- LOW_CONFIDENCE\n- Page 3, upper-left note: "lemma [?]"\n-->`, and compare each page file back against the page image line by line before finalizing it.
+4. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
+5. Format math with `$...$` and `$$...$$`.
+6. Represent diagrams with ASCII, a precise textual description, or a coordinate-style description that preserves the original relationships.
+7. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
+8. Re-open every low-confidence region with cropped zoomed images saved under `zoomed/page_NNN_region_MM.png` and update the page Markdown.
+9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or keep `[?]` only for marks that are still unresolved after the zoom re-check and then delete the comment block.
+10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
+11. Immediately run `transcription-content-review` against the generated transcription workspace.
+12. For orchestration and cleanup, treat review as successful only when the review step writes both `transcription_reviewed.md` and `review_report.md` into the working folder, and `review_report.md` ends with the exact line `Final verdict: Ready for promotion`.
+13. If review succeeds, check whether `<pdf-basename>.md` already exists next to the original PDF before promoting. If it already exists, stop, do not overwrite it, preserve the workspace for inspection, and report the collision. Only promote `transcription_reviewed.md` when the final destination does not already exist. In this pipeline, `review_report.md` is an intermediate handoff artifact used during review and promotion, so after successful promotion you may remove `pages/`, `parts/`, `zoomed/`, `transcription.md`, `transcription_reviewed.md`, `review_report.md`, and delete the temporary working folder.
+14. If `review_report.md` ends with `Final verdict: Blocked`, or if `review_report.md` or `transcription_reviewed.md` is missing, or if the final verdict line is missing or malformed, or if there is extra trailing text after `Final verdict: Ready for promotion`, or if the review command fails, treat review as failed with a malformed report. Keep the full temporary workspace for inspection and report that cleanup did not run.
+15. Deliver only the final `<pdf-basename>.md` path after a successful review.
 
-```python
-from pdf2image import convert_from_path
+## Output rules
 
-images = convert_from_path(pdf_path, dpi=300)
-for i, img in enumerate(images):
-    img.save(f"{working_folder}/pages/page_{i+1:03d}.png")
-```
-
-## Step 4 — Dispatch parallel subagents for transcription
-
-Always prefer parallel subagents over sequential processing. This saves context window and improves throughput. Divide pages into batches and dispatch one subagent per batch.
-
-### Batching strategy
-
-- **≤ 5 pages:** 1 page per subagent (full parallelism)
-- **6–20 pages:** 2–3 pages per subagent
-- **> 20 pages:** 4–5 pages per subagent
-
-### Subagent contract
-
-Each subagent **writes its output to markdown files** in the `parts/` subfolder — one `.md` file per page. Subagents must never return markdown content inline; they must write files. This makes merging reliable regardless of output length.
-
-Every subagent prompt must include **all of the following** verbatim or in equivalent detail:
-
----
-
-**START OF SUBAGENT PROMPT TEMPLATE**
-
-You are transcribing handwritten notes from PDF page images into Markdown.
-
-**Core goal:** Transcribe with 100% fidelity. Every word, symbol, annotation, diagram, and margin note must be captured. The output language must match the language of the handwriting. Do not summarize, paraphrase, or omit any content.
-
-**Your assigned pages:** [LIST PAGE NUMBERS]
-
-**Image paths:** [LIST FULL PATHS TO PAGE IMAGES]
-
-**Output:** For each assigned page, write a markdown file to:
-`[working_folder]/parts/page_NNN.md`
-
-Each file should contain only the transcribed content for that page (no filename headers, no page-number prefixes — just the content). Use `---` as a page separator only if the page has a clear section break in the handwriting itself.
-
-**Formatting rules:**
-
-| Handwritten Element | Markdown Representation |
-|---|---|
-| Main titles | `# Heading 1` |
-| Subsections | `## Heading 2` or `### Heading 3` |
-| Outline / nested structures | Nested bullet points (`-`) or numbered lists (`1.`) |
-
-- Preserve the exact wording, sequence, and organizational hierarchy as written.
-- Include all content: definitions, examples, side annotations, margin notes.
-- Format key terms, underlined words, or emphasized concepts using **bold** or *italics*.
-- Use LaTeX syntax for all math: inline `$...$`, display `$$...$$`.
-- Preserve all subscripts (`$a_n$`), superscripts (`$x^2$`), Greek letters (`$\alpha, \epsilon, \delta$`), and operators (`$\int, \sum, \forall, \exists, \in$`).
-- For diagrams/figures: use ASCII art, textual descriptions, or coordinate-based explanations — whatever is most faithful. Capture all arrows, connectors, and visual relationships.
-- Make every effort to decipher difficult handwriting using context. Mark genuinely uncertain transcriptions with `[?]` only as a last resort. Never use `[illegible]` or skip content.
-
-**Confidence tracking:** After transcription, identify any region where your confidence is below 99%. For each such region, note the page number, approximate location, and the uncertain text in a comment block at the very end of the markdown file:
-
-```markdown
-<!-- LOW_CONFIDENCE
-- Line 5: "∂f/∂x" might be "df/dx" — strokes ambiguous
-- Margin note near bottom-right: word after "hence" unclear, transcribed as "bounded [?]"
--->
-```
-
-**Validation:** Before writing each file, compare your transcription against the source image line by line. Confirm character-level accuracy for text and structural accuracy for equations, lists, and diagrams.
-
-**END OF SUBAGENT PROMPT TEMPLATE**
-
----
-
-### Launching subagents
-
-Dispatch all subagents in the **same turn** so they run in parallel. Do not wait for one batch to finish before starting the next.
-
-## Step 5 — Zoom-in pass on low-confidence regions
-
-After all subagents complete, scan every `parts/page_NNN.md` file for `<!-- LOW_CONFIDENCE` blocks. For each flagged region:
-
-1. Crop the relevant area from the full-page image.
-2. Re-render at 2×–4× magnification and save to `zoomed/page_NNN_region_MM.png`.
-3. Re-examine the zoomed crop visually.
-4. Update the markdown file in `parts/` with corrections.
-5. Remove or update the `LOW_CONFIDENCE` comment.
-
-If a region remains unresolvable after zoomed inspection, keep the `[?]` marker.
-
-## Step 6 — Merge into final output
-
-Concatenate all `parts/page_NNN.md` files in numerical order into a single `transcription.md` at the working folder root. Insert page-break markers between pages:
-
-```markdown
-<!-- Page 1 -->
-[content of page_001.md]
-
----
-
-<!-- Page 2 -->
-[content of page_002.md]
-
-...
-```
-
-The merge is a simple file concatenation — this is why subagents write files instead of returning content inline.
-
-## Step 7 — Final validation sweep
-
-Perform a full-document comparison: read `transcription.md` and compare against the rendered page images. Check for:
-
-- Missing content (skipped lines, dropped margin notes)
-- Structural errors (wrong heading levels, broken list nesting)
-- Math formatting issues (unclosed `$`, malformed LaTeX)
-- Remaining `[?]` markers that can now be resolved in context
-
-Fix any discrepancies directly in `transcription.md`.
-
-## Step 8 — Deliver
-
-Leave `transcription.md` in the working folder and present its full path to the user.
+- Never summarize or paraphrase during transcription.
+- Keep margin notes and inline annotations.
+- Use `[?]` only after the zoomed re-check still cannot resolve the mark.
+- Never use `[illegible]`, `[unreadable]`, or other omission placeholders.
+- The final success state is one reviewed Markdown file next to the source PDF and no temporary workspace.
+- If the destination `<pdf-basename>.md` already exists, do not overwrite it; stop and preserve the workspace instead.
+- `review_report.md` is an intermediate handoff artifact for this pipeline and does not need to remain after successful promotion, but promotion is gated on the report ending with the exact line `Final verdict: Ready for promotion`.
 
 ## Completion checklist
 
-The job is complete only when all of these are true:
-
-- All pages rendered to images in `pages/`
-- All pages transcribed via parallel subagents to `parts/`
-- All low-confidence regions zoomed and re-examined
-- All per-page files merged into `transcription.md`
-- Final validation sweep passed with no remaining discrepancies
-- Output delivered to the user
+- All pages rendered to `pages/`
+- All page files written to `parts/`
+- All low-confidence regions rechecked
+- `transcription.md` merged and reviewed
+- Final reviewed file renamed to `<pdf-basename>.md`
+- Temporary workspace deleted after successful review, or preserved on review failure
