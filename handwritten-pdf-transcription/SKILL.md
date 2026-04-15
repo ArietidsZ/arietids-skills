@@ -33,20 +33,22 @@ notes/
 ## Workflow
 
 1. Render every page to PNG at 300 DPI or higher with a method that preserves image objects for later cropped zoom work.
-2. Transcribe each page into `parts/page_NNN.md`.
+2. Transcribe each page into `parts/page_NNN.md` with best-effort reading; never skip content or use generic omission placeholders such as `[illegible]`.
 3. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
 4. Format math with `$...$` and `$$...$$`.
 5. Represent diagrams with Mermaid, ASCII, or a precise structured description.
 6. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
-7. Re-open every low-confidence region with cropped zoomed images and update the page Markdown.
-8. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files.
-9. Run one final sweep against the rendered page images before delivering the output path.
+7. Re-open every low-confidence region with cropped zoomed images, update the page Markdown, and remove resolved `LOW_CONFIDENCE` comment blocks before merge.
+8. If a mark is still unresolved after the zoomed re-check, keep only the uncertain transcription with `[?]`; do not carry `LOW_CONFIDENCE` audit comments into `transcription.md`.
+9. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files.
+10. Run one final sweep against the rendered page images before delivering the output path.
 
 ## Output rules
 
 - Never summarize or paraphrase.
 - Keep margin notes and inline annotations.
 - Use `[?]` only after the zoomed re-check still cannot resolve the mark.
+- Never use `[illegible]`, `[unreadable]`, or other omission placeholders.
 - Deliver the final `transcription.md` path.
 
 ## Completion checklist
