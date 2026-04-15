@@ -10,6 +10,7 @@ Transcribe handwritten PDFs into structured Markdown without dropping content. P
 ## Required helpers
 
 - Use `pdf` to render pages and inspect layout.
+- Use a page-rendering method that yields image objects suitable for cropped zoom-ins and re-renders of low-confidence regions, not a PNG-only flow that blocks in-memory crop work.
 - If the document has multiple pages and subagents are available, split page batches across workers instead of transcribing sequentially.
 - Read `references/transcription-worker-prompt.md` before dispatching page workers.
 
@@ -31,14 +32,14 @@ notes/
 
 ## Workflow
 
-1. Render every page to PNG at 300 DPI or higher.
+1. Render every page to PNG at 300 DPI or higher with a method that preserves image objects for later cropped zoom work.
 2. Transcribe each page into `parts/page_NNN.md`.
 3. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
 4. Format math with `$...$` and `$$...$$`.
 5. Represent diagrams with Mermaid, ASCII, or a precise structured description.
 6. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
 7. Re-open every low-confidence region with cropped zoomed images and update the page Markdown.
-8. Merge page files in order into `transcription.md`.
+8. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files.
 9. Run one final sweep against the rendered page images before delivering the output path.
 
 ## Output rules
