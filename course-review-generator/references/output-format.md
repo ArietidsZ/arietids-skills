@@ -2,19 +2,21 @@
 
 Use this reference when assembling the final review guide.
 
+Adapt headings, labels, and examples to the source or course language. Do not force English section names when the materials are in another language unless the user asks for translation.
+
 ## Output skeleton
 
 ```markdown
-# Course Review
+# Review Title
 
-## Key Takeaways
+## Key Takeaways / Key Points
 
 1. Define the core ideas before memorizing formulas.
 2. Keep every formula attached to its conditions of use.
 
 ---
 
-## Topic 1: Foundations
+## Topic 1 / Chapter 1 / Lecture 1
 
 ### Definitions and Terms
 - **Uniform continuity**: continuity with one delta that works for every point in the domain.<sup>Lec 3 p12</sup>
@@ -38,6 +40,7 @@ Use this reference when assembling the final review guide.
 - Put source tags at the end of the line as `<sup>Lec 3 p12</sup>`.
 - Use `==整理==<sup>Lec 5 p3</sup>` for reorganized source content.
 - Use `==推得==<sup>依据：Lec 3 p12 + Lec 4 p8</sup>` only for direct derivations that are clearly supported by the material.
+- Keep the final headings and item wording in the source or course language unless the user requests translation.
 
 ## Coverage checklist
 
