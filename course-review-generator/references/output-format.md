@@ -49,7 +49,7 @@ Brief note on when this pattern is used.<sup>Lec 8 p4</sup>
 - Keep each bullet to one to three lines.
 - Put source tags at the end of the line as `<sup>Lec 3 p12</sup>`.
 - Use `==整理==<sup>Lec 5 p3</sup>` for reorganized source content.
-- Use `==推得==<sup>依据：Lec 3 p12 + Lec 4 p8</sup>` only for direct derivations that are clearly supported by the material.
+- Use `==推得==<sup>依据：Lec 3 p12 + Lec 4 p8</sup>` only for trivial or immediate derivations that are clearly and directly supported by the material.
 - Keep the final headings and item wording in the source or course language unless the user requests translation.
 - When later material repeats an earlier entry, point back to the original item instead of duplicating it, and fold refinements or addenda into the original entry.
 - For diagram-derived content, make the visual origin explicit with a marker such as `[diagram]` or `[图示]`.
@@ -67,6 +67,7 @@ Brief note on when this pattern is used.<sup>Lec 8 p4</sup>
 - Speaker notes, footnotes, and page-footer or footer-style annotations
 - Recap, summary, and learning-objective slides
 - General results abstracted from worked examples when supported by the source
+- Memorable proof techniques, constructions, or recurring proof moves when they are exam-relevant
 - Source tags merged onto deduplicated entries and later refinements folded into the original item
 - Uncertain but plausibly testable items included or marked as `[可选记忆]`
 - Exam-relevant code preserved as language-tagged fenced blocks with concise context

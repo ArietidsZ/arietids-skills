@@ -47,9 +47,10 @@ Generate an exam-focused Markdown study guide from course materials without impo
 
 - Include speaker notes, footnotes, page-footer or footer-style annotations, recap slides, summary slides, and learning-objective slides when present.
 - Extract reusable general results from worked examples when the source material supports them.
+- Preserve memorable proof methods or techniques when proofs contain exam-relevant strategies, constructions, or recurring moves.
 - Reformulate caveat-style source material such as `However`, `Note that`, `思考`, and similar side remarks into explicit propositions or exam-relevant reminders when they carry testable meaning.
 - Preserve exam-relevant diagram content with enough fidelity to retain labels, annotations, axes, legends, and structure when present, and make it clear that the item came from a visual source.
 - Preserve exam-relevant code fragments or code patterns as concise fenced code blocks with the correct language tag when the source material includes them.
-- Mark reorganized content with `==整理==` and directly derived items with `==推得==`.
+- Mark reorganized content with `==整理==` and use `==推得==` only for trivial or immediate derivations that are clearly and directly supported by the source material.
 - Lean toward inclusion when exam relevance is uncertain and mark borderline items with `[可选记忆]`.
 - Keep the final document readable as a standalone study guide.
