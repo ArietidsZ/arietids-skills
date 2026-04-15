@@ -20,7 +20,7 @@ Transcribe handwritten PDFs into structured Markdown without dropping content, t
 
 Create a working folder next to the source PDF using the PDF filename without `.pdf`.
 
-The temporary workspace must be created fresh for the current run. If a sibling directory with that PDF basename already exists and is non-empty, do not reuse or delete it blindly: stop and ask for cleanup, or choose a different temporary workspace name for this run.
+The temporary workspace must be newly created for the current run. If a sibling directory with that PDF basename already exists, do not reuse or delete it automatically: stop and ask for cleanup, or choose a different temporary workspace name for this run.
 
 ```text
 notes/
@@ -36,7 +36,7 @@ notes/
 
 ## Workflow
 
-1. Create a fresh working folder for this run, then create `pages/`, `parts/`, and `zoomed/` inside it before rendering pages or dispatching page workers. If the basename-matched sibling directory already exists and is non-empty, stop before writing files there unless you intentionally switch to a different temporary workspace name.
+1. Create a newly created working folder for this run, then create `pages/`, `parts/`, and `zoomed/` inside it before rendering pages or dispatching page workers. If the basename-matched sibling directory already exists at all, stop before writing files there unless you intentionally switch to a different temporary workspace name.
 2. Render every page to PNG at 300 DPI or higher with a renderer that still allows later crop and re-render zoom work, whether by keeping image objects in memory or by reopening saved page PNGs for cropping.
 3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`. During page-level transcription and sequential fallback, unresolved marks may be carried inline as temporary `[?]` markers so they can be revisited in the zoom pass. If subagents are unavailable, write the same per-page files sequentially yourself instead of switching output formats: keep each `parts/page_NNN.md` file to page content only, append low-confidence regions in the exact `<!-- LOW_CONFIDENCE ... -->` block shape, for example `<!-- LOW_CONFIDENCE\n- Page 3, upper-left note: "lemma [?]"\n-->`, and compare each page file back against the page image line by line before finalizing it.
 4. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
@@ -49,7 +49,7 @@ notes/
 11. Immediately run `transcription-content-review` against the generated transcription workspace.
 12. For orchestration and cleanup, treat review as successful only when the review step writes both `transcription_reviewed.md` and `review_report.md` into the working folder, and after reading `review_report.md` you find the exact line `Final verdict: Ready for promotion`.
 13. If review succeeds, promote `transcription_reviewed.md` to `<pdf-basename>.md` next to the original PDF. In this pipeline, `review_report.md` is an intermediate handoff artifact used during review and promotion, so after successful promotion you may remove `pages/`, `parts/`, `zoomed/`, `transcription.md`, `transcription_reviewed.md`, `review_report.md`, and delete the temporary working folder.
-14. If `review_report.md` ends with `Final verdict: Blocked`, or if `review_report.md` or `transcription_reviewed.md` is missing, or if the review command fails, treat review as failed. Keep the full temporary workspace for inspection and report that cleanup did not run.
+14. If `review_report.md` ends with `Final verdict: Blocked`, or if `review_report.md` or `transcription_reviewed.md` is missing, or if the final verdict line is missing or malformed, or if the review command fails, treat review as failed. Keep the full temporary workspace for inspection and report that cleanup did not run.
 15. Deliver only the final `<pdf-basename>.md` path after a successful review.
 
 ## Output rules
