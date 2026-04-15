@@ -48,7 +48,7 @@ notes/
 10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
 11. Immediately run `transcription-content-review` against the generated transcription workspace.
 12. For orchestration and cleanup, treat review as successful only when the review step writes both `transcription_reviewed.md` and `review_report.md` into the working folder, and `review_report.md` ends with the exact line `Final verdict: Ready for promotion`.
-13. If review succeeds, promote `transcription_reviewed.md` to `<pdf-basename>.md` next to the original PDF. In this pipeline, `review_report.md` is an intermediate handoff artifact used during review and promotion, so after successful promotion you may remove `pages/`, `parts/`, `zoomed/`, `transcription.md`, `transcription_reviewed.md`, `review_report.md`, and delete the temporary working folder.
+13. If review succeeds, check whether `<pdf-basename>.md` already exists next to the original PDF before promoting. If it already exists, stop, do not overwrite it, preserve the workspace for inspection, and report the collision. Only promote `transcription_reviewed.md` when the final destination does not already exist. In this pipeline, `review_report.md` is an intermediate handoff artifact used during review and promotion, so after successful promotion you may remove `pages/`, `parts/`, `zoomed/`, `transcription.md`, `transcription_reviewed.md`, `review_report.md`, and delete the temporary working folder.
 14. If `review_report.md` ends with `Final verdict: Blocked`, or if `review_report.md` or `transcription_reviewed.md` is missing, or if the final verdict line is missing or malformed, or if there is extra trailing text after `Final verdict: Ready for promotion`, or if the review command fails, treat review as failed with a malformed report. Keep the full temporary workspace for inspection and report that cleanup did not run.
 15. Deliver only the final `<pdf-basename>.md` path after a successful review.
 
@@ -59,6 +59,7 @@ notes/
 - Use `[?]` only after the zoomed re-check still cannot resolve the mark.
 - Never use `[illegible]`, `[unreadable]`, or other omission placeholders.
 - The final success state is one reviewed Markdown file next to the source PDF and no temporary workspace.
+- If the destination `<pdf-basename>.md` already exists, do not overwrite it; stop and preserve the workspace instead.
 - `review_report.md` is an intermediate handoff artifact for this pipeline and does not need to remain after successful promotion, but promotion is gated on the report ending with the exact line `Final verdict: Ready for promotion`.
 
 ## Completion checklist

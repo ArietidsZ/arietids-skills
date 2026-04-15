@@ -16,10 +16,10 @@ Custom skills that extend the local `~/.agents/skills` skill base.
 
 ## Local install
 
-From any checkout of this repository in a POSIX shell. If you run this from `.worktrees/...`, it still installs symlinks to the stable primary checkout instead of the temporary worktree:
+From any checkout of this repository in a POSIX shell. If you run this from `.worktrees/...`, it installs symlinks to that current worktree checkout rather than the primary checkout:
 
 ```sh
-repo_root="$(CDPATH= cd -- "$(git rev-parse --path-format=absolute --git-common-dir)/.." && pwd)"
+repo_root="$(git rev-parse --show-toplevel)"
 mkdir -p "$HOME/.agents/skills"
 rm -rf "$HOME/.agents/skills/course-review-generator"
 rm -rf "$HOME/.agents/skills/handwritten-pdf-transcription"
