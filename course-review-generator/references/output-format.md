@@ -6,7 +6,7 @@ Adapt headings, labels, and examples to the source or course language. Do not fo
 
 ## Output skeleton
 
-```markdown
+````markdown
 # Review Title
 
 ## Key Takeaways / Key Points
@@ -42,7 +42,7 @@ Brief note on when this pattern is used.<sup>Lec 8 p4</sup>
 
 ### Visuals and Diagrams
 - [diagram] Function-growth sketch with axes, curve labels, and shaded feasible region preserved in text form.<sup>Lec 5 p9</sup>
-```
+````
 
 ## Per-item rules
 
@@ -64,9 +64,14 @@ Brief note on when this pattern is used.<sup>Lec 8 p4</sup>
 - Equivalent-condition sets and necessary or sufficient condition families, listed completely when present
 - Applicability, boundary, sign, and edge-case conditions
 - Formulas, algorithm steps, and inference-rule sets, listed completely when present, plus complexity or stability notes
+- Speaker notes, footnotes, and page-footer or footer-style annotations
+- Recap, summary, and learning-objective slides
+- General results abstracted from worked examples when supported by the source
+- Source tags merged onto deduplicated entries and later refinements folded into the original item
+- Uncertain but plausibly testable items included or marked as `[可选记忆]`
+- Exam-relevant code preserved as language-tagged fenced blocks with concise context
+- Exam-relevant diagrams preserve labels, annotations, axes, legends, and structure with explicit visual markers
 - Comparisons, counterexamples, and common confusions
-- Diagram information that matters for the exam
-- Uncertain but plausibly testable items marked as `[可选记忆]`
 
 ## Diagram handling order
 

@@ -27,13 +27,14 @@ Generate an exam-focused Markdown study guide from course materials without impo
 6. If multiple topics are independent and subagents are available, assign one topic per worker and have each worker write a draft Markdown file.
 7. When subagents are unavailable or you are processing one subset at a time, save each intermediate topic or chapter draft as a Markdown file before moving on.
 8. Merge the drafts into one review guide for the chosen scope.
-9. Stay grounded in the source materials only; do not import outside textbook knowledge.
-10. Keep the guide in the source or course language unless the user explicitly asks for a different output language.
-11. Cover definitions, theorems, equivalent-condition sets, necessary and sufficient condition families, and applicability, boundary, and sign conditions exhaustively when present.
-12. Cover formulas, algorithm steps, inference-rule sets, complexity, stability, comparisons, exam-relevant code fragments or code patterns, and exam-relevant diagram content exhaustively when present.
-13. For uncertain but possibly testable items, lean toward inclusion and mark them with `[可选记忆]` instead of dropping them.
-14. Deduplicate repeated material and merge source tags; when later material repeats an earlier entry, point back to the original item instead of re-listing it, and fold later refinements or addenda into the original item rather than duplicating it.
-15. Save one final Markdown review document and report its path.
+9. Run a final self-check before delivery to confirm source tags are merged correctly, recap, summary, and learning-objective material is covered, later refinements are deduplicated into original entries, and uncertain-but-testable items are either included or marked `[可选记忆]`.
+10. Stay grounded in the source materials only; do not import outside textbook knowledge.
+11. Keep the guide in the source or course language unless the user explicitly asks for a different output language.
+12. Cover definitions, theorems, equivalent-condition sets, necessary and sufficient condition families, and applicability, boundary, and sign conditions exhaustively when present.
+13. Cover formulas, algorithm steps, inference-rule sets, complexity, stability, comparisons, exam-relevant code fragments or code patterns, and exam-relevant diagram content exhaustively when present.
+14. For uncertain but possibly testable items, lean toward inclusion and mark them with `[可选记忆]` instead of dropping them.
+15. Deduplicate repeated material and merge source tags; when later material repeats an earlier entry, point back to the original item instead of re-listing it, and fold later refinements or addenda into the original item rather than duplicating it.
+16. Save one final Markdown review document and report its path.
 
 ## Continuation and updates
 
