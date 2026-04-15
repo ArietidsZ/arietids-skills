@@ -33,16 +33,17 @@ notes/
 
 ## Workflow
 
-1. Render every page to PNG at 300 DPI or higher with a method that preserves image objects for later cropped zoom work.
-2. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`.
-3. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
-4. Format math with `$...$` and `$$...$$`.
-5. Represent diagrams with Mermaid, ASCII, or a precise structured description.
-6. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
-7. Re-open every low-confidence region with cropped zoomed images and update the page Markdown.
-8. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or convert any still-unresolved mark into the final inline `[?]` form and then delete the comment block.
-9. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
-10. Run one final sweep against the rendered page images before delivering the output path.
+1. Create `pages/`, `parts/`, and `zoomed/` inside the working folder before rendering pages or dispatching page workers.
+2. Render every page to PNG at 300 DPI or higher with a method that preserves image objects for later cropped zoom work.
+3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`.
+4. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
+5. Format math with `$...$` and `$$...$$`.
+6. Represent diagrams with Mermaid, ASCII, or a precise structured description.
+7. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
+8. Re-open every low-confidence region with cropped zoomed images and update the page Markdown.
+9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or convert any still-unresolved mark into the final inline `[?]` form and then delete the comment block.
+10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
+11. Run one final sweep against the rendered page images before delivering the output path.
 
 ## Output rules
 
