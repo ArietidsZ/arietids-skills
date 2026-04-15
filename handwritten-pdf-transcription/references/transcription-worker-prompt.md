@@ -15,9 +15,10 @@ Write one Markdown file per assigned page to `parts/page_NNN.md` in the provided
 Rules:
 
 - Account for every visible mark and content region on the page, including hard-to-read text, symbols, annotations, arrows, labels, and diagram elements.
+- Preserve the exact sequence and organizational hierarchy of the source content.
 - Use best-effort transcription for every visible mark or region; do not drop difficult content or omit uncertain material.
 - Keep the source language.
-- Use Markdown headings and lists only when the handwritten structure clearly supports them.
+- Use Markdown headings, lists, tables, and section breaks only when the handwritten structure clearly supports them.
 - Format math with `$...$` and `$$...$$`.
 - Represent diagrams with Mermaid, ASCII, or a precise structured description.
 - Do not add filename headers or page-number prefixes inside the page file.
