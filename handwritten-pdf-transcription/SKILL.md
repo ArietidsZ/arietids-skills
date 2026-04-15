@@ -13,7 +13,7 @@ Transcribe handwritten PDFs into structured Markdown without dropping content. P
 - Choose a page-rendering method that preserves image objects for cropped zoom-ins and low-confidence re-renders, for example `pdf2image` or an equivalent image-object-capable renderer, not a PNG-only flow that blocks in-memory crop work.
 - If subagents are available, have page workers write one Markdown file per page under `parts/`; do not collect transcript text inline in worker responses.
 - Use 1 page for a single-page document; if subagents are available, use 1 page per batch for 2-5 pages, 2-3 pages per batch for 6-20 pages, and 4-5 pages per batch above 20 pages, and dispatch all batches in parallel in the same turn rather than serially.
-- Read `references/transcription-worker-prompt.md` before dispatching page workers.
+- Read this skill's bundled worker-prompt file, `references/transcription-worker-prompt.md`, before dispatching page workers.
 
 ## Working folder
 
