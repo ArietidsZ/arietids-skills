@@ -1,4 +1,4 @@
 interface:
   display_name: "Transcription Content Review"
   short_description: "Review and correct transcribed notes"
-  default_prompt: "Use $transcription-content-review to review this transcription, write a corrected standalone version, and produce an audit report of every fix."
+  default_prompt: "Use $transcription-content-review to review this transcription, write a corrected standalone version, and produce an audit report of every fix. If this runs after handwritten transcription, leave final renaming and cleanup to the transcription pipeline."

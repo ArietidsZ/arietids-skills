@@ -14,6 +14,20 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - If the user points to another Markdown file, review that file instead.
 - If the user pastes transcription content directly in chat, review that content as the source text. Only write `transcription_reviewed.md` and `review_report.md` when there is a real source-backed folder for the transcription; otherwise return the corrected standalone document and the full review report directly in chat.
 
+## Pipeline-stage mode
+
+Use this mode when the review skill is invoked from the handwritten transcription pipeline rather than directly by the user.
+
+- The transcription workspace is the review scope.
+- Write `transcription_reviewed.md` and `review_report.md` inside that workspace for handoff back to the transcription skill.
+- Keep standalone file-backed runs user-facing: report both file paths to the user.
+- Keep chat-only runs chat-facing: return both outputs directly in chat.
+- In pipeline-stage mode, do not rename the final file.
+- In pipeline-stage mode, do not delete the workspace.
+- In pipeline-stage mode, instead of reporting both file paths to the user, report the review outputs back to the transcription skill.
+- In pipeline-stage mode, review is `Ready for promotion` only when both `transcription_reviewed.md` and `review_report.md` are produced and the reviewer does not identify a blocking review failure.
+- In pipeline-stage mode, review is `Blocked` when required outputs cannot be produced or when the reviewer cannot complete the review reliably enough for final promotion.
+
 ## Workflow
 
 1. Read the whole document before editing anything.
@@ -23,6 +37,7 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 5. If there is a real source-backed folder for the transcription, write `review_report.md` in that folder; otherwise prepare the full review report for direct chat output.
 6. If there is a real source-backed folder for the transcription, write the corrected document to `transcription_reviewed.md` in that folder; otherwise return the corrected standalone document directly in chat.
 7. Keep the reviewed document clean; keep reasoning and audit details in `review_report.md`, or in the full review report returned in chat-only runs, including recurring patterns, reconstructed passages, readability or structural changes if applicable, and a final verdict.
+8. If operating in pipeline-stage mode, leave final renaming and cleanup to the transcription pipeline.
 
 ## Correction standard
 
@@ -50,7 +65,9 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - `transcription_reviewed.md` and `review_report.md` for file-backed runs
 - The corrected standalone document and full review report returned directly in chat for chat-only runs
 
-Report both file paths back to the user for file-backed runs, or clearly label both outputs in chat-only runs, and call out any heavily reconstructed passages.
+Report both file paths back to the user for standalone file-backed runs, or clearly label both outputs in chat-only runs, and call out any heavily reconstructed passages.
+
+In pipeline-stage mode, hand the review outputs back to the transcription skill instead of reporting both file paths to the user.
 
 ## Completion checklist
 
@@ -61,4 +78,6 @@ Report both file paths back to the user for file-backed runs, or clearly label b
 - `transcription_reviewed.md` is clean, readable, and free of unresolved placeholders or hidden review markup.
 - The author's structure was preserved unless a minimal structural adjustment was necessary for correctness or readability.
 - `review_report.md` includes the required overview, per-issue entries, severity labels, and closing sections.
-- Both deliverables were saved in the source-backed folder when one existed and both were presented back to the user, or both were returned directly in chat when only pasted content was available without a source-backed folder.
+- For pipeline-stage mode, both deliverables were saved in the transcription workspace, the review status is explicitly `Ready for promotion` or `Blocked`, final renaming was not performed, and workspace cleanup was not performed.
+- For standalone file-backed runs, both deliverables were saved in the source-backed folder and both file paths were presented back to the user.
+- For chat-only runs, both outputs were returned directly in chat when only pasted content was available without a source-backed folder.
