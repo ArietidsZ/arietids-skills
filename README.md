@@ -19,7 +19,7 @@ Custom skills that extend the local `~/.agents/skills` skill base.
 From the repository root in a POSIX shell:
 
 ```sh
-repo_root="$(pwd)"
+repo_root="$(CDPATH= cd -- "$(git rev-parse --path-format=absolute --git-common-dir)/.." && pwd)"
 mkdir -p "$HOME/.agents/skills"
 rm -rf "$HOME/.agents/skills/course-review-generator"
 rm -rf "$HOME/.agents/skills/handwritten-pdf-transcription"
