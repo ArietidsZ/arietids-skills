@@ -16,7 +16,7 @@ Custom skills that extend the local `~/.agents/skills` skill base.
 
 ## Local install
 
-From the repository root in a POSIX shell:
+From any checkout of this repository in a POSIX shell. If you run this from `.worktrees/...`, it still installs symlinks to the stable primary checkout instead of the temporary worktree:
 
 ```sh
 repo_root="$(CDPATH= cd -- "$(git rev-parse --path-format=absolute --git-common-dir)/.." && pwd)"
