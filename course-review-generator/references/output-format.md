@@ -30,6 +30,13 @@ Adapt headings, labels, and examples to the source or course language. Do not fo
 ### Formulas and Algorithms
 - Newton iteration: $x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}$.<sup>Lec 6 p5</sup>
 
+```python
+def push(stack, value):
+    stack.append(value)
+```
+
+Brief note on when this pattern is used.<sup>Lec 8 p4</sup>
+
 ### Comparisons and Pitfalls
 - Continuity does not imply differentiability; the converse fails at sharp corners.<sup>Lec 4 p10</sup>
 
@@ -46,6 +53,7 @@ Adapt headings, labels, and examples to the source or course language. Do not fo
 - Keep the final headings and item wording in the source or course language unless the user requests translation.
 - For diagram-derived content, make the visual origin explicit with a marker such as `[diagram]` or `[图示]`.
 - Do not flatten an exam-relevant figure into a vague summary; preserve labels, annotations, axes, legends, and spatial relationships when present.
+- Keep exam-relevant code as concise fenced code blocks with the correct language tag instead of flattening it into prose.
 
 ## Coverage checklist
 
