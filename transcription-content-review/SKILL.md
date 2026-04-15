@@ -19,9 +19,9 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 1. Read the whole document before editing anything.
 2. Identify the subject, level, notation, and language so corrections stay context-aware.
 3. Review sequentially for transcription artefacts, mathematical errors, logical errors, definitional errors, factual issues, notation inconsistencies, unit or dimensional errors, cross-reference errors, terminological misuse, and unclear fragments.
-4. Start `review_report.md` with an overview, then record each issue with location, category, severity, original text, problem, correction, and enough explanation or working to show why the correction is right.
-5. Write the corrected document to `transcription_reviewed.md` in the same folder.
-6. Keep the reviewed document clean; keep reasoning and audit details in `review_report.md`, including recurring patterns, reconstructed passages, readability or structural changes if applicable, and a final verdict.
+4. Start `review_report.md` with an overview, then record each issue in document order with location, category, severity, original text, problem, correction, and enough explanation or working to show why the correction is right.
+5. If a working folder exists, write the corrected document to `transcription_reviewed.md` in that folder; otherwise return the corrected standalone document directly in chat.
+6. Keep the reviewed document clean; keep reasoning and audit details in `review_report.md`, or in the full review report returned in chat-only runs, including recurring patterns, reconstructed passages, readability or structural changes if applicable, and a final verdict.
 
 ## Correction standard
 
@@ -35,8 +35,9 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 
 ## Review report requirements
 
-- Include an overview with subject, level, and a brief summary of the review outcome.
+- Include an overview with subject, level, a brief summary of the review outcome, and an issue-count breakdown by category and severity.
 - Use a consistent severity scale for every issue: `Critical` for errors that make the notes unreliable or materially wrong, `Significant` for corrections that affect meaning or correctness in a limited scope, and `Minor` for readability, notation, or presentation fixes that do not materially change the claim.
+- List issues in document order.
 - Include a recurring-patterns section when similar issues appear more than once.
 - Include a reconstructed-passages section listing every place where the final text depends on reconstruction or ambiguity resolution.
 - Include a readability or structural changes summary when those edits were made.
@@ -44,10 +45,10 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 
 ## Deliverables
 
-- `transcription_reviewed.md`
-- `review_report.md`
+- `transcription_reviewed.md` and `review_report.md` for file-backed runs
+- The corrected standalone document and full review report returned directly in chat for chat-only runs
 
-Report both paths back to the user and call out any heavily reconstructed passages.
+Report both file paths back to the user for file-backed runs, or clearly label both outputs in chat-only runs, and call out any heavily reconstructed passages.
 
 ## Completion checklist
 
