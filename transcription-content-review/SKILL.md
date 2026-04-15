@@ -12,7 +12,7 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - Prefer `transcription.md` when reviewing the output of handwritten transcription.
 - If sibling page images are available, use them to resolve ambiguous passages.
 - If the user points to another Markdown file, review that file instead.
-- If the user pastes transcription content directly in chat, review that content as the source text. If a working folder is available, still produce `transcription_reviewed.md` and `review_report.md` there; if no backing folder exists, return the corrected standalone document and the full review report directly in chat.
+- If the user pastes transcription content directly in chat, review that content as the source text. Only write `transcription_reviewed.md` and `review_report.md` when there is a real source-backed folder for the transcription; otherwise return the corrected standalone document and the full review report directly in chat.
 
 ## Workflow
 
@@ -20,7 +20,7 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 2. Identify the subject, level, notation, and language so corrections stay context-aware.
 3. Review sequentially for transcription artefacts, mathematical errors, logical errors, definitional errors, factual issues, notation inconsistencies, unit or dimensional errors, cross-reference errors, terminological misuse, and unclear fragments.
 4. Start `review_report.md` with an overview, then record each issue in document order with location, category, severity, original text, problem, correction, and enough explanation or working to show why the correction is right.
-5. If a working folder exists, write the corrected document to `transcription_reviewed.md` in that folder; otherwise return the corrected standalone document directly in chat.
+5. If there is a real source-backed folder for the transcription, write the corrected document to `transcription_reviewed.md` in that folder; otherwise return the corrected standalone document directly in chat.
 6. Keep the reviewed document clean; keep reasoning and audit details in `review_report.md`, or in the full review report returned in chat-only runs, including recurring patterns, reconstructed passages, readability or structural changes if applicable, and a final verdict.
 
 ## Correction standard
@@ -29,7 +29,7 @@ Review a transcription and turn it into a corrected standalone document. Fix tra
 - Prefer the smallest correction that makes the document accurate and readable.
 - Preserve the author's structure and voice; fix and clarify rather than substantially reorganizing or adding content beyond what is needed for correctness and readability.
 - Make only minimal structural adjustments when they are necessary to keep the document coherent or usable.
-- Remove `[?]`, `LOW_CONFIDENCE`, and HTML comments from the final reviewed document.
+- Remove `[?]`, `LOW_CONFIDENCE`, and stray editorial HTML comments from the final reviewed document, but keep page-marker comments when they help navigation or auditing against source pages.
 - If the final text depends on reconstruction rather than certainty, mark it with a footnote or another visible inline indicator and explain the reconstruction in the report.
 - If a passage remains ambiguous, choose the best interpretation, mark it visibly in the final document, and explain that choice in the report.
 
@@ -59,4 +59,4 @@ Report both file paths back to the user for file-backed runs, or clearly label b
 - `transcription_reviewed.md` is clean, readable, and free of unresolved placeholders or hidden review markup.
 - The author's structure was preserved unless a minimal structural adjustment was necessary for correctness or readability.
 - `review_report.md` includes the required overview, per-issue entries, severity labels, and closing sections.
-- Both deliverables were saved in the working folder when file output was possible and both were presented back to the user, or both were returned directly in chat when only pasted content was available.
+- Both deliverables were saved in the source-backed folder when one existed and both were presented back to the user, or both were returned directly in chat when only pasted content was available without a source-backed folder.
