@@ -20,7 +20,7 @@ Rules:
 - Represent diagrams with Mermaid, ASCII, or a precise structured description.
 - Do not add filename headers or page-number prefixes inside the page file.
 - Never use `[illegible]`, `[unreadable]`, or other generic omission placeholders.
-- Use `[?]` only for marks that remain unresolved after best-effort reading.
+- Use `[?]` only for marks that remain unresolved after best-effort reading, and list each such mark in the `LOW_CONFIDENCE` block so the main agent revisits it during the zoom pass.
 
 If confidence drops below 99% for any region, append this block at the end of the page file:
 
@@ -31,3 +31,5 @@ If confidence drops below 99% for any region, append this block at the end of th
 ```
 
 Before saving the file, compare the Markdown back against the image line by line.
+
+`[?]` is temporary at this stage: it should survive into final output only if the main agent rechecks that region with zoomed images and it is still unresolved.
