@@ -47,9 +47,9 @@ notes/
 9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or keep `[?]` only for marks that are still unresolved after the zoom re-check and then delete the comment block.
 10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
 11. Immediately run `transcription-content-review` against the generated transcription workspace.
-12. For orchestration and cleanup, treat review as successful only when the review step completes without blocking issues and writes both `transcription_reviewed.md` and `review_report.md` into the working folder.
+12. For orchestration and cleanup, treat review as successful only when the review step writes both `transcription_reviewed.md` and `review_report.md` into the working folder, and after reading `review_report.md` you find the exact line `Final verdict: Ready for promotion`.
 13. If review succeeds, promote `transcription_reviewed.md` to `<pdf-basename>.md` next to the original PDF. In this pipeline, `review_report.md` is an intermediate handoff artifact used during review and promotion, so after successful promotion you may remove `pages/`, `parts/`, `zoomed/`, `transcription.md`, `transcription_reviewed.md`, `review_report.md`, and delete the temporary working folder.
-14. If review fails, treat that operationally as any missing reviewed output, any blocking review result, or any review command failure. Keep the full temporary workspace for inspection and report that cleanup did not run.
+14. If `review_report.md` ends with `Final verdict: Blocked`, or if `review_report.md` or `transcription_reviewed.md` is missing, or if the review command fails, treat review as failed. Keep the full temporary workspace for inspection and report that cleanup did not run.
 15. Deliver only the final `<pdf-basename>.md` path after a successful review.
 
 ## Output rules
@@ -59,7 +59,7 @@ notes/
 - Use `[?]` only after the zoomed re-check still cannot resolve the mark.
 - Never use `[illegible]`, `[unreadable]`, or other omission placeholders.
 - The final success state is one reviewed Markdown file next to the source PDF and no temporary workspace.
-- `review_report.md` is an intermediate handoff artifact for this pipeline and does not need to remain after successful promotion.
+- `review_report.md` is an intermediate handoff artifact for this pipeline and does not need to remain after successful promotion, but promotion is gated on reading it and finding `Final verdict: Ready for promotion`.
 
 ## Completion checklist
 
