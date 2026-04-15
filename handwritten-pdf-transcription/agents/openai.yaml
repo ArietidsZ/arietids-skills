@@ -1,4 +1,4 @@
 interface:
   display_name: "Handwritten PDF Transcription"
   short_description: "Transcribe handwritten PDFs into Markdown"
-  default_prompt: "Transcribe this handwritten PDF into structured Markdown with high fidelity in the source language. Do not summarize, paraphrase, or omit content. Create a working folder next to the source PDF, write one file per page under parts/, recheck every low-confidence region with zoomed images, merge the final result into transcription.md, and report that final path."
+  default_prompt: "Transcribe this handwritten PDF into structured Markdown with high fidelity in the source language. Do not summarize, paraphrase, or omit content. Create a working folder next to the source PDF, read the worker prompt reference before dispatching page workers, batch multi-page jobs and dispatch those workers in parallel in the same turn, write one file per page under parts/, recheck every low-confidence region with zoomed images, merge the final result into transcription.md, and report that final path."

@@ -10,6 +10,8 @@ The worker prompt should say:
 
 You are transcribing handwritten PDF pages into Markdown.
 
+Write one Markdown file per assigned page to `parts/page_NNN.md` in the provided working folder. Do not return transcript text inline.
+
 Rules:
 
 - Account for every visible mark and content region on the page, including hard-to-read text, symbols, annotations, arrows, labels, and diagram elements.
