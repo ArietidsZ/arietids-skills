@@ -35,13 +35,13 @@ notes/
 
 1. Create `pages/`, `parts/`, and `zoomed/` inside the working folder before rendering pages or dispatching page workers.
 2. Render every page to PNG at 300 DPI or higher with an image-object-capable renderer so the workflow keeps page images in memory for later crop and re-render zoom work before saving the page PNGs.
-3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`. If subagents are unavailable, write the same per-page files sequentially yourself instead of switching output formats.
+3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`. During page-level transcription and sequential fallback, unresolved marks may be carried inline as temporary `[?]` markers so they can be revisited in the zoom pass. If subagents are unavailable, write the same per-page files sequentially yourself instead of switching output formats.
 4. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
 5. Format math with `$...$` and `$$...$$`.
 6. Represent diagrams with ASCII, a precise textual description, or a coordinate-style description that preserves the original relationships.
 7. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
 8. Re-open every low-confidence region with cropped zoomed images saved under `zoomed/page_NNN_region_MM.png` and update the page Markdown.
-9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or convert any still-unresolved mark into the final inline `[?]` form and then delete the comment block.
+9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or keep `[?]` only for marks that are still unresolved after the zoom re-check and then delete the comment block.
 10. Merge page files in order into `transcription.md`, keeping explicit page markers such as `<!-- Page N -->` between concatenated page files. The merged transcript must not contain any `LOW_CONFIDENCE` comments.
 11. Run one final sweep against the rendered page images before delivering the output path.
 
