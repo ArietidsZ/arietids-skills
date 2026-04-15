@@ -16,22 +16,28 @@ Custom skills that extend the local `~/.agents/skills` skill base.
 
 ## Local install
 
-From the repository root:
+From the repository root in a POSIX shell:
 
-```bash
+```sh
 repo_root="$(pwd)"
 mkdir -p "$HOME/.agents/skills"
-ln -sfn "$repo_root/course-review-generator" "$HOME/.agents/skills/course-review-generator"
-ln -sfn "$repo_root/handwritten-pdf-transcription" "$HOME/.agents/skills/handwritten-pdf-transcription"
-ln -sfn "$repo_root/transcription-content-review" "$HOME/.agents/skills/transcription-content-review"
+rm -rf "$HOME/.agents/skills/course-review-generator"
+rm -rf "$HOME/.agents/skills/handwritten-pdf-transcription"
+rm -rf "$HOME/.agents/skills/transcription-content-review"
+ln -s "$repo_root/course-review-generator" "$HOME/.agents/skills/course-review-generator"
+ln -s "$repo_root/handwritten-pdf-transcription" "$HOME/.agents/skills/handwritten-pdf-transcription"
+ln -s "$repo_root/transcription-content-review" "$HOME/.agents/skills/transcription-content-review"
 ```
 
 ## Rebuild packages
 
-From the repository root:
+From the repository root in a POSIX shell:
 
-```bash
-rm -f -- packages/*.skill(N)
+```sh
+mkdir -p "packages"
+rm -f "packages/course-review-generator.skill"
+rm -f "packages/handwritten-pdf-transcription.skill"
+rm -f "packages/transcription-content-review.skill"
 zip -rq "packages/course-review-generator.skill" "course-review-generator"
 zip -rq "packages/handwritten-pdf-transcription.skill" "handwritten-pdf-transcription"
 zip -rq "packages/transcription-content-review.skill" "transcription-content-review"
