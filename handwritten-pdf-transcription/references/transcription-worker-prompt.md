@@ -19,6 +19,7 @@ Rules:
 - Use best-effort transcription for every visible mark or region; do not drop difficult content or omit uncertain material.
 - Keep the source language.
 - Use Markdown headings, lists, tables, and section breaks only when the handwritten structure clearly supports them.
+- Preserve handwritten emphasis such as underlining or highlighted key terms with Markdown emphasis when appropriate.
 - Format math with `$...$` and `$$...$$`.
 - Represent diagrams with Mermaid, ASCII, or a precise structured description.
 - Do not add filename headers or page-number prefixes inside the page file.

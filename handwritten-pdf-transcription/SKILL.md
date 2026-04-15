@@ -1,6 +1,6 @@
 ---
 name: handwritten-pdf-transcription
-description: Use when the user wants a handwritten PDF, notebook scan, or annotated handwritten pages transcribed into Markdown, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
+description: Use when the user wants handwritten notes, a notebook scan, a handwritten PDF, or annotated pages read, digitized, or converted into Markdown/text, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
 ---
 
 # Handwritten PDF Transcription
