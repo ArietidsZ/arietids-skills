@@ -32,6 +32,9 @@ Adapt headings, labels, and examples to the source or course language. Do not fo
 
 ### Comparisons and Pitfalls
 - Continuity does not imply differentiability; the converse fails at sharp corners.<sup>Lec 4 p10</sup>
+
+### Visuals and Diagrams
+- [diagram] Function-growth sketch with axes, curve labels, and shaded feasible region preserved in text form.<sup>Lec 5 p9</sup>
 ```
 
 ## Per-item rules
@@ -41,15 +44,19 @@ Adapt headings, labels, and examples to the source or course language. Do not fo
 - Use `==整理==<sup>Lec 5 p3</sup>` for reorganized source content.
 - Use `==推得==<sup>依据：Lec 3 p12 + Lec 4 p8</sup>` only for direct derivations that are clearly supported by the material.
 - Keep the final headings and item wording in the source or course language unless the user requests translation.
+- For diagram-derived content, make the visual origin explicit with a marker such as `[diagram]` or `[图示]`.
+- Do not flatten an exam-relevant figure into a vague summary; preserve labels, annotations, axes, legends, and spatial relationships when present.
 
 ## Coverage checklist
 
 - Definitions, notation, and units
 - Theorems, laws, propositions, and corollaries
-- Conditions, criteria, and edge cases
-- Formulas, algorithms, and complexity notes
+- Equivalent, necessary, and sufficient conditions
+- Applicability, boundary, sign, and edge-case conditions
+- Formulas, algorithm steps, inference rules, and complexity or stability notes
 - Comparisons, counterexamples, and common confusions
 - Diagram information that matters for the exam
+- Uncertain but plausibly testable items marked as `[可选记忆]`
 
 ## Diagram handling order
 
@@ -57,3 +64,5 @@ Adapt headings, labels, and examples to the source or course language. Do not fo
 2. ASCII diagrams when spatial layout matters and Mermaid is awkward.
 3. Markdown tables when the visual is mostly tabular.
 4. Structured text description when the figure cannot be represented well any other way.
+
+When representing a figure, retain all exam-relevant labels, annotations, axes, legends, and directional or spatial relationships that appear in the source.
