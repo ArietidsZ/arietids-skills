@@ -1,6 +1,6 @@
 ---
 name: handwritten-pdf-transcription
-description: Use when the user wants handwritten notes, a notebook scan, a handwritten PDF, or annotated pages read, digitized, or converted into Markdown/text, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
+description: Use when the user wants a handwritten PDF, notebook-scan PDF, or annotated PDF pages read, digitized, or converted into Markdown/text, especially when the document mixes prose, math, diagrams, or margin notes and needs high-fidelity extraction.
 ---
 
 # Handwritten PDF Transcription
@@ -10,7 +10,7 @@ Transcribe handwritten PDFs into structured Markdown without dropping content. P
 ## Required helpers
 
 - Invoke the `pdf` skill for visual PDF handling and page inspection.
-- Choose a page-rendering method that preserves image objects for cropped zoom-ins and low-confidence re-renders, for example `pdf2image` or an equivalent image-object-capable renderer, not a PNG-only flow that blocks in-memory crop work.
+- Choose a page-rendering method that keeps crop-capable zoom review possible, for example `pdf2image` or an equivalent renderer that preserves image objects or produces saved renders that can be reopened for cropping and low-confidence re-renders.
 - If subagents are available, have page workers write one Markdown file per page under `parts/`; do not collect transcript text inline in worker responses.
 - Use 1 page for a single-page document; if subagents are available, use 1 page per batch for 2-5 pages, 2-3 pages per batch for 6-20 pages, and 4-5 pages per batch above 20 pages, and dispatch all batches in parallel in the same turn rather than serially.
 - Read this skill's bundled worker-prompt file, `references/transcription-worker-prompt.md`, before dispatching page workers.
@@ -34,7 +34,7 @@ notes/
 ## Workflow
 
 1. Create `pages/`, `parts/`, and `zoomed/` inside the working folder before rendering pages or dispatching page workers.
-2. Render every page to PNG at 300 DPI or higher with an image-object-capable renderer so the workflow keeps page images in memory for later crop and re-render zoom work before saving the page PNGs.
+2. Render every page to PNG at 300 DPI or higher with a renderer that still allows later crop and re-render zoom work, whether by keeping image objects in memory or by reopening saved page PNGs for cropping.
 3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`. During page-level transcription and sequential fallback, unresolved marks may be carried inline as temporary `[?]` markers so they can be revisited in the zoom pass. If subagents are unavailable, write the same per-page files sequentially yourself instead of switching output formats.
 4. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
 5. Format math with `$...$` and `$$...$$`.
