@@ -21,7 +21,7 @@ Rules:
 - Use Markdown headings, lists, tables, and section breaks only when the handwritten structure clearly supports them.
 - Preserve handwritten emphasis such as underlining or highlighted key terms with Markdown emphasis when appropriate.
 - Format math with `$...$` and `$$...$$`.
-- Represent diagrams with Mermaid, ASCII, or a precise structured description.
+- Represent diagrams with ASCII, a precise textual description, or a coordinate-style description that preserves the original relationships.
 - Do not add filename headers or page-number prefixes inside the page file.
 - Never use `[illegible]`, `[unreadable]`, or other generic omission placeholders.
 - Use `[?]` only for marks or regions that remain unresolved after best-effort reading, preserve that uncertainty inline instead of omitting it, and list each such `[?]` case in the `LOW_CONFIDENCE` block so the main agent revisits it during the zoom pass.

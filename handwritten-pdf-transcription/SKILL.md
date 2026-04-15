@@ -38,7 +38,7 @@ notes/
 3. Transcribe each page into `parts/page_NNN.md` with best-effort reading; page workers must write one file per page under `parts/`, not return transcript text inline, and must never skip content or use generic omission placeholders such as `[illegible]`. If subagents are unavailable, write the same per-page files sequentially yourself instead of switching output formats.
 4. Keep handwritten structure when it is real: headings, lists, tables, and section breaks.
 5. Format math with `$...$` and `$$...$$`.
-6. Represent diagrams with Mermaid, ASCII, or a precise structured description.
+6. Represent diagrams with ASCII, a precise textual description, or a coordinate-style description that preserves the original relationships.
 7. Append a `LOW_CONFIDENCE` comment block to the page file whenever any region is below 99% confidence.
 8. Re-open every low-confidence region with cropped zoomed images saved under `zoomed/page_NNN_region_MM.png` and update the page Markdown.
 9. Before merge, every page file must have its `LOW_CONFIDENCE` audit comments removed: resolve the text directly, or convert any still-unresolved mark into the final inline `[?]` form and then delete the comment block.
