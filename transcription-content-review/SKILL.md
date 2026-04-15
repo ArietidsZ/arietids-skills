@@ -27,6 +27,8 @@ Use this mode when the review skill is invoked from the handwritten transcriptio
 - In pipeline-stage mode, instead of reporting both file paths to the user, report the review outputs back to the transcription skill.
 - In pipeline-stage mode, review is `Ready for promotion` only when both `transcription_reviewed.md` and `review_report.md` are produced and the reviewer does not identify a blocking review failure.
 - In pipeline-stage mode, review is `Blocked` when required outputs cannot be produced or when the reviewer cannot complete the review reliably enough for final promotion.
+- In pipeline-stage mode, `review_report.md` must end with a machine-readable final verdict line in the form `Final verdict: Ready for promotion` or `Final verdict: Blocked`.
+- In chat-only runs, the full review report returned in chat must also include that same final verdict line.
 
 ## Workflow
 
@@ -59,6 +61,8 @@ Use this mode when the review skill is invoked from the handwritten transcriptio
 - Include a reconstructed-passages section listing every place where the final text depends on reconstruction or ambiguity resolution.
 - Include a readability or structural changes summary when those edits were made.
 - End with a verdict on the overall reliability of the reviewed notes.
+- When the review is part of the transcription pipeline, end `review_report.md` with a machine-readable final verdict line: `Final verdict: Ready for promotion` or `Final verdict: Blocked`.
+- When returning the report directly in chat, include the same machine-readable final verdict line in the chat report.
 
 ## Deliverables
 
@@ -78,6 +82,8 @@ In pipeline-stage mode, hand the review outputs back to the transcription skill 
 - `transcription_reviewed.md` is clean, readable, and free of unresolved placeholders or hidden review markup.
 - The author's structure was preserved unless a minimal structural adjustment was necessary for correctness or readability.
 - `review_report.md` includes the required overview, per-issue entries, severity labels, and closing sections.
-- For pipeline-stage mode, both deliverables were saved in the transcription workspace, the review status is explicitly `Ready for promotion` or `Blocked`, final renaming was not performed, and workspace cleanup was not performed.
+- For pipeline-stage mode, `review_report.md` was saved in the transcription workspace and ends with `Final verdict: Ready for promotion` or `Final verdict: Blocked`.
+- For pipeline-stage mode, `transcription_reviewed.md` was saved in the transcription workspace when the final reviewed document could be produced reliably; `Blocked` runs do not require both deliverables.
+- For pipeline-stage mode, final renaming was not performed and workspace cleanup was not performed.
 - For standalone file-backed runs, both deliverables were saved in the source-backed folder and both file paths were presented back to the user.
 - For chat-only runs, both outputs were returned directly in chat when only pasted content was available without a source-backed folder.
