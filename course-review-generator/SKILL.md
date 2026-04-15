@@ -29,10 +29,10 @@ Generate an exam-focused Markdown study guide from course materials without impo
 8. Merge the drafts into one review guide for the chosen scope.
 9. Stay grounded in the source materials only; do not import outside textbook knowledge.
 10. Keep the guide in the source or course language unless the user explicitly asks for a different output language.
-11. Cover definitions, theorems, equivalent conditions, necessary and sufficient conditions, applicability, boundary, and sign conditions when present.
-12. Cover formulas, algorithm steps, inference rules, complexity, stability, comparisons, exam-relevant code fragments or code patterns, and exam-relevant diagram content when present.
+11. Cover definitions, theorems, equivalent-condition sets, necessary and sufficient condition families, and applicability, boundary, and sign conditions exhaustively when present.
+12. Cover formulas, algorithm steps, inference-rule sets, complexity, stability, comparisons, exam-relevant code fragments or code patterns, and exam-relevant diagram content exhaustively when present.
 13. For uncertain but possibly testable items, lean toward inclusion and mark them with `[可选记忆]` instead of dropping them.
-14. Deduplicate repeated material and merge source tags.
+14. Deduplicate repeated material and merge source tags; when later material repeats an earlier entry, point back to the original item instead of re-listing it, and fold later refinements or addenda into the original item rather than duplicating it.
 15. Save one final Markdown review document and report its path.
 
 ## Continuation and updates
@@ -46,6 +46,7 @@ Generate an exam-focused Markdown study guide from course materials without impo
 
 - Include speaker notes, footnotes, page-footer or footer-style annotations, recap slides, summary slides, and learning-objective slides when present.
 - Extract reusable general results from worked examples when the source material supports them.
+- Reformulate caveat-style source material such as `However`, `Note that`, `思考`, and similar side remarks into explicit propositions or exam-relevant reminders when they carry testable meaning.
 - Preserve exam-relevant diagram content with enough fidelity to retain labels, annotations, axes, legends, and structure when present, and make it clear that the item came from a visual source.
 - Preserve exam-relevant code fragments or code patterns as concise fenced code blocks with the correct language tag when the source material includes them.
 - Mark reorganized content with `==整理==` and directly derived items with `==推得==`.
