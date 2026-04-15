@@ -25,18 +25,19 @@ Generate an exam-focused Markdown study guide from course materials without impo
 4. When the material is too broad for one useful guide, process one chapter, lecture, or topic subset at a time instead of flattening everything into one massive document.
 5. Read each file with the matching helper skill or direct-reading method.
 6. If multiple topics are independent and subagents are available, assign one topic per worker and have each worker write a draft Markdown file.
-7. Merge the drafts into one review guide for the chosen scope.
-8. Stay grounded in the source materials only; do not import outside textbook knowledge.
-9. Keep the guide in the source or course language unless the user explicitly asks for a different output language.
-10. Cover definitions, theorems, equivalent conditions, necessary and sufficient conditions, applicability, boundary, and sign conditions when present.
-11. Cover formulas, algorithm steps, inference rules, complexity, stability, comparisons, and exam-relevant diagram content when present.
-12. For uncertain but possibly testable items, lean toward inclusion and mark them with `[可选记忆]` instead of dropping them.
-13. Deduplicate repeated material and merge source tags.
-14. Save one final Markdown review document and report its path.
+7. When subagents are unavailable or you are processing one subset at a time, save each intermediate topic or chapter draft as a Markdown file before moving on.
+8. Merge the drafts into one review guide for the chosen scope.
+9. Stay grounded in the source materials only; do not import outside textbook knowledge.
+10. Keep the guide in the source or course language unless the user explicitly asks for a different output language.
+11. Cover definitions, theorems, equivalent conditions, necessary and sufficient conditions, applicability, boundary, and sign conditions when present.
+12. Cover formulas, algorithm steps, inference rules, complexity, stability, comparisons, and exam-relevant diagram content when present.
+13. For uncertain but possibly testable items, lean toward inclusion and mark them with `[可选记忆]` instead of dropping them.
+14. Deduplicate repeated material and merge source tags.
+15. Save one final Markdown review document and report its path.
 
 ## Non-negotiables
 
-- Include speaker notes, footnotes, recap slides, and summary slides when present.
+- Include speaker notes, footnotes, page-footer or footer-style annotations, recap slides, summary slides, and learning-objective slides when present.
 - Extract reusable general results from worked examples when the source material supports them.
 - Preserve exam-relevant diagram content with enough fidelity to retain labels, annotations, axes, legends, and structure when present, and make it clear that the item came from a visual source.
 - Mark reorganized content with `==整理==` and directly derived items with `==推得==`.
